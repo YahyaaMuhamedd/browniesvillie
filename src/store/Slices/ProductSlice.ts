@@ -5,7 +5,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 interface ProductState {
-    Product: any[];
+    Product: Product[];
     Loading: boolean;
     Error: string | null;
 }
