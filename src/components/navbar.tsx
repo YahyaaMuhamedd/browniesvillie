@@ -23,7 +23,7 @@ const Navbar: React.FC = () => {
                     {/* Left Side */}
 
                     {/* Center Logo */}
-                    <h1 className=""><BrawniesvllieLogo /></h1>
+                    <h1><BrawniesvllieLogo /></h1>
 
                     {/* Right Icons */}
                     {isDesktop ? (

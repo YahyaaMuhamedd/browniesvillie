@@ -1,10 +1,13 @@
+'use client'
 import { useEffect, useRef, useState } from "react";
 
 const useWindowSize = () => {
-    const isDesktopRef = useRef(window.innerWidth >= 768);
+    const isClient = typeof window !== "undefined";
+    const isDesktopRef = useRef(isClient ? window.innerWidth >= 768 : true);
     const [, forceRender] = useState(0); // لإجبار التحديث عند تغيير الحجم
 
     useEffect(() => {
+        if (!isClient) return;
         const handleResize = () => {
             const newIsDesktop = window.innerWidth >= 768;
             if (isDesktopRef.current !== newIsDesktop) {

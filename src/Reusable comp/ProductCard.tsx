@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from "@/hooks/Redux";
 import { fetchProducts } from "@/services/ProductServices";
 import Image from "next/image";
 import React, { useEffect } from "react";
-import Button from "./Button";
 
 const ProductCard: React.FC = () => {
     const dispatch = useAppDispatch();
