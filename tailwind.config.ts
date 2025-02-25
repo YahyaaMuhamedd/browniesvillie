@@ -11,11 +11,20 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        background: "var(--background)",
         mainColor: "var(--main-color)",
-        secondaryColor: "var(--secondary-color)",
-        borderColor: "var(--border-color)"
+        borderColor: "var(--border-color)",
+        secondColor: "var(--second-color)",
       },
     },
   },
+  safelist: [
+    'text-mainColor',
+    'bg-mainColor',
+    'text-[#B15D26]',
+    'bg-[#BEB9B6]',
+    'text-[#BEB9B6]',
+    'bg-[#0000006d]'
+  ],
   plugins: [flowbite.plugin()],
 };

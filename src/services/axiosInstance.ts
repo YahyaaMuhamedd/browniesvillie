@@ -1,9 +1,8 @@
 import axios from "axios";
 
-const domain: string = "https://brownies-villie-back-end.vercel.app/api/"
 
 const AxiosInstance = axios.create({
-    baseURL: domain,
+    baseURL: process.env.DOMAIN,
     // headers: {
     //     'Content-Type': 'application/json',
     // }

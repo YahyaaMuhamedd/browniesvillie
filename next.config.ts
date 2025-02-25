@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['i.ibb.co'], // Add the domain here
   },
+  env: {
+    DOMAIN: 'https://brownies-villie-back-end.vercel.app/api/'
+  }
 };
 
 export default nextConfig;

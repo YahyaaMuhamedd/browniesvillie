@@ -4,8 +4,7 @@ import ProductCard from "@/Reusable comp/ProductCard";
 export default function Home() {
   return (
     <>
-      <SwipperSlider />
-      <ProductCard />
+      {/* <ProductCard /> */}
     </>
   );
 }
