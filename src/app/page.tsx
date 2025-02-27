@@ -1,9 +1,12 @@
-// import SwipperSlider from "@/components/Slider/headerSlider";
+import SwipperSlider from "@/components/Slider/headerSlider";
 import ProductCard from "@/Reusable comp/ProductCard";
+import { Title } from "@/Reusable comp/titles";
 
 export default function Home() {
   return (
     <>
+      <SwipperSlider />
+      <Title title="Our Products" cssClasses=" text-mainColor flex justify-center items-center " />
       <ProductCard />
     </>
   );

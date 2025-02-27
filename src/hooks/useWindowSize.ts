@@ -1,26 +1,27 @@
-'use client'
-import { useEffect, useRef, useState } from "react";
+'use client';
+
+import { useEffect, useState } from "react";
 
 const useWindowSize = () => {
-    const isClient = typeof window !== "undefined";
-    const isDesktopRef = useRef(isClient ? window.innerWidth >= 768 : true);
-    const [, forceRender] = useState(0); // لإجبار التحديث عند تغيير الحجم
+    const [isDesktop, setIsDesktop] = useState<boolean | undefined>(undefined);
 
     useEffect(() => {
-        if (!isClient) return;
-        const handleResize = () => {
-            const newIsDesktop = window.innerWidth >= 768;
-            if (isDesktopRef.current !== newIsDesktop) {
-                isDesktopRef.current = newIsDesktop;
-                forceRender(prev => prev + 1); // تحديث مرة واحدة فقط عند التغيير
-            }
-        };
+        // Only run this effect on the client side
+        if (typeof window !== "undefined") {
+            const handleResize = () => {
+                setIsDesktop(window.innerWidth >= 768);
+            };
 
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
+            // Set the initial value
+            handleResize();
+
+            // Add event listener for window resize
+            window.addEventListener("resize", handleResize);
+            return () => window.removeEventListener("resize", handleResize);
+        }
     }, []);
 
-    return isDesktopRef.current;
+    return isDesktop;
 };
 
 export default useWindowSize;

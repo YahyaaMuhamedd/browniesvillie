@@ -3,12 +3,82 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #1E1E1E;
   --main-color: #B15D26;
   --second-color: #BEB9B6;
+  --border-color: #A84707;
 }
 
 body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+
+  .contain,
+  .contain-fluid,
+  .contain-lg,
+  .contain-md,
+  .contain-sm,
+  .contain-xl,
+  .contain-xxl {
+    --bs-gutter-x: 2.5rem;
+    --bs-gutter-y: 0;
+    width: 100%;
+    padding-right: calc(var(--bs-gutter-x) * 0.5);
+    padding-left: calc(var(--bs-gutter-x) * 0.5);
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  @media (min-width: 576px) {
+
+    .contain,
+    .contain-sm {
+      max-width: 540px;
+    }
+  }
+
+  @media (min-width: 768px) {
+
+    .contain,
+    .contain-md,
+    .contain-sm {
+      max-width: 720px;
+    }
+  }
+
+  @media (min-width: 992px) {
+
+    .contain,
+    .contain-lg,
+    .contain-md,
+    .contain-sm {
+      max-width: 960px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+
+    .contain,
+    .contain-lg,
+    .contain-md,
+    .contain-sm,
+    .contain-xl {
+      max-width: 1140px;
+    }
+  }
+
+  @media (min-width: 1400px) {
+
+    .contain,
+    .contain-lg,
+    .contain-md,
+    .contain-sm,
+    .contain-xl,
+    .contain-xxl {
+      max-width: 1320px;
+    }
+  }
 }
