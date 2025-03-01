@@ -1,9 +1,10 @@
 "use client";
-import Nuts from "@/assets/SVG/Nuts";
 import { useAppDispatch, useAppSelector } from "@/hooks/Redux";
 import { fetchProducts } from "@/services/ProductServices";
 import Image from "next/image";
 import { useEffect } from "react";
+import Button from "./Button";
+import { addToLocalStorage } from "@/functions/localStorage";
 
 const ProductCard: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -13,8 +14,8 @@ const ProductCard: React.FC = () => {
         dispatch(fetchProducts())
     }, [dispatch])
 
-    if (Loading) return <div>Loading...</div>;
-
+    if (Loading) return <>Loading...</>;
+    if (Error) return <>{Error}</>;
 
 
     return (
@@ -41,7 +42,11 @@ const ProductCard: React.FC = () => {
                             {product.description}
                         </h2>
                         <p className="text-xl font-semibold text-mainColor">${product.price}</p>
-                        {Error}
+                        <Button cssClasses="bg-mainColor hover:bg-secondColor text-white"
+                            buttonName="Add to Cart" handleclick={() => addToLocalStorage({
+                                key: 'cart',
+                                value: product
+                            })} />
                     </div>
                 ))}
             </div>

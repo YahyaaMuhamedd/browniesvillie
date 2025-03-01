@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import FavoriteIcon from "@/assets/SVG/favorite";
 import SearchIcon from "@/assets/SVG/search";
 import ShoppingcartIcon from "@/assets/SVG/shopping_cart_checkout";
@@ -29,7 +29,9 @@ const Navbar: React.FC = () => {
                     {isMounted && isDesktop ? ( // Only render if mounted and isDesktop
                         <div className="flex space-x-4">
                             <SearchIcon />
-                            <ShoppingcartIcon />
+                            <Link href="/Cart" className="text-[#BEB9B6] cursor-pointer">
+                                <ShoppingcartIcon />
+                            </Link>
                             <FavoriteIcon />
                         </div>
                     ) : (
@@ -55,7 +57,9 @@ const Navbar: React.FC = () => {
                         <Link href="/" className="w-full text-[#BEB9B6]">Contact Us</Link>
                         <div className="flex justify-evenly mt-3 w-full">
                             <SearchIcon />
-                            <ShoppingcartIcon />
+                            <Link href="/Cart" className="text-[#BEB9B6] cursor-pointer">
+                                <ShoppingcartIcon />
+                            </Link>
                             <FavoriteIcon />
                         </div>
                     </div>

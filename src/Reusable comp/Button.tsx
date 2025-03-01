@@ -9,7 +9,7 @@ type handleclick = {
 export default function Button({ handleclick, buttonName, cssClasses }: handleclick) {
   return (
     <>
-      <button onClick={handleclick} className={` ${cssClasses}`}>{buttonName}</button>
+      <button onClick={handleclick} className={`rounded-lg bg-mainColor text-secondColor ${cssClasses}`}>{buttonName}</button>
     </>
   )
 }
