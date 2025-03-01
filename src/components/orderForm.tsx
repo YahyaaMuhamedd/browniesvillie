@@ -59,7 +59,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
             ...prevData,
             orderItems,
         }));
-    }, []);
+    }, [quantities]);
     const quantity = quantities[formData.orderItems.map((item) => item.productId)[0]] || 1;
 
     // تحديث حالة النموذج عند تغيير الحقول
