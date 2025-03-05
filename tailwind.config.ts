@@ -9,10 +9,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        mainColor: "var(--main-color)",
         background: "var(--background)",
         bgSecondColor: "var(--bg-second-color)",
-        mainColor: "var(--main-color)",
-        borderColor: "var(--border-color)",
         secondColor: "var(--second-color)",
         color: "var(--border-color)"
       },
@@ -21,12 +20,12 @@ module.exports = {
   safelist: [
     'text-mainColor',
     'bg-mainColor',
-    'text-[#B15D26]',
-    'bg-[#BEB9B6]',
-    'text-[#BEB9B6]',
-    'bg-[#0000006d]',
     'bg-bgSecondColor',
     'border-color',
+    'text-secondColor',
+    'bg-secondColor',
+    'text-[#BEB9B6]',
+    'bg-[#0000006d]',
     { pattern: /.*/ }
 
   ],

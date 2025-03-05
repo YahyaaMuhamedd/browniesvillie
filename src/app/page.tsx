@@ -1,6 +1,6 @@
 import SwipperSlider from "@/components/Slider/headerSlider";
-import ProductCard from "@/Reusable comp/ProductCard";
-import { Title } from "@/Reusable comp/titles";
+import ProductCard from "@/ReusableComp/ProductCard";
+import { Title } from "@/ReusableComp/titles";
 
 export default function Home() {
   return (

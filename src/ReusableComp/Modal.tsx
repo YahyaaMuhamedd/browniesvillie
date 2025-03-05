@@ -1,37 +1,39 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // Higher-Order Component (HOC) لـ Modal
-const withModal = (WrappedComponent: React.ComponentType<any>, modalTitle?: string) => {
-    return (props: any) => {
+export const withModal = (WrappedComponent: React.ComponentType<any>, props?: any, modalTitle?: string, btnTitle?: string, cssClasses?: string) => {
+    // Return a functional component
+    return () => {
         const [isModalOpen, setIsModalOpen] = useState(false);
 
-        // فتح الـ Modal
         const openModal = () => {
             setIsModalOpen(true);
         };
 
-        // إغلاق الـ Modal
         const closeModal = () => {
             setIsModalOpen(false);
         };
+
         useEffect(() => {
+            const handleEscape = (e: KeyboardEvent) => {
+                if (e.key === "Escape") closeModal();
+            };
 
-            window.addEventListener("keydown", (event) => {
-                if (event.key === "Escape" && isModalOpen) {
-                    closeModal();
-                }
-            });
-        }, [])
+            window.addEventListener("keydown", handleEscape);
 
+            // Cleanup event listener
+            return () => {
+                window.removeEventListener("keydown", handleEscape);
+            };
+        }, []);
 
         return (
             <div>
-                {/* زر لفتح الـ Modal */}
                 <button
                     onClick={openModal}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                    className={`${cssClasses}`}
                 >
-                    Open Modal
+                    {btnTitle || "Open Modal"}
                 </button>
 
                 {/* الـ Modal */}
@@ -58,5 +60,3 @@ const withModal = (WrappedComponent: React.ComponentType<any>, modalTitle?: stri
         );
     };
 };
-
-export default withModal;

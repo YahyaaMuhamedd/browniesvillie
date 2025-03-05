@@ -1,13 +1,16 @@
-export function ArrayConverter(object: any) {
-    if (object) {
-        try {
-            const parsedObject = JSON.parse(object);
+export function ArrayConverter(object: string | null): any[] {
+    if (!object) return [];
 
-            const cartArray = Object.values(parsedObject);
-            return cartArray
-        } catch (error) {
-            console.error("Error parsing cart data:", error);
-            return [];
+    try {
+        const parsedObject = JSON.parse(object);
+
+        if (Array.isArray(parsedObject)) {
+            return parsedObject;
         }
+
+        return Object.values(parsedObject);
+    } catch (error) {
+        console.error("Error parsing cart data:", error);
+        return [];
     }
 }

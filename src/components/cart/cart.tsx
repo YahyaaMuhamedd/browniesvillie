@@ -2,13 +2,12 @@
 
 import { ArrayConverter } from "@/helpers/arrayConverter";
 import { useAppDispatch, useAppSelector } from "@/hooks/Redux";
-import Button from "@/Reusable comp/Button";
+import Button from "@/ReusableComp/Button";
 import { decrement, increment } from "@/store/Slices/quantitySlice";
 import { Product } from "@/types/ProductTypes";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { RootState } from "@/store/store"; // استيراد RootState
-import orderForm from "../orderForm";
 import OrderForm from "../orderForm";
 
 const Cart: React.FC = () => {
@@ -16,20 +15,20 @@ const Cart: React.FC = () => {
 
     const quantities = useAppSelector((state: RootState) => state.quantity.quantities);
     const dispatch = useAppDispatch();
-
     useEffect(() => {
+
         const cartLocalStorage = localStorage.getItem('cart');
         console.log('Cart data from localStorage:', cartLocalStorage); // تحقق من البيانات
         const cartData: any = ArrayConverter(cartLocalStorage);
         setCart(cartData);
-    }, []);
+    }, [quantities]); // Add `quantities` as a dependency
 
     // حساب الإجمالي
     const total = cart.reduce((sum, item) => sum + item.price * (quantities[item._id] || 1), 0);
 
     return (
-        <div className="min-h-screen bg-[#1E1E1E] text-[#BEB9B6] p-6">
-            <h1 className="text-3xl font-bold text-[#B15D26] mb-8">Your Cart</h1>
+        <div className="min-h-screen bg-[#1E1E1E] text-secondColor p-6">
+            <h1 className="text-3xl font-bold text-mainColor mb-8">Your Cart</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* قائمة المنتجات */}
@@ -70,7 +69,13 @@ const Cart: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <button className="mt-4 text-[#B15D26] hover:text-[#A84707]">
+                                <button className="mt-4 text-[#B15D26] hover:text-[#A84707]"
+                                    onClick={() => {
+                                        const updatedCart = cart.filter((product) => product._id !== item._id);
+                                        setCart(updatedCart);
+                                        localStorage.setItem('cart', JSON.stringify(updatedCart));
+                                    }}
+                                >
                                     Remove
                                 </button>
                             </div>
@@ -99,11 +104,7 @@ const Cart: React.FC = () => {
                             <p>${(total + 5 + 2.5).toFixed(2)}</p>
                         </div>
                     </div>
-                    <Button
-                        buttonName="Checkout"
-                        cssClasses={"w-full bg-[#B15D26] text-white py-2 rounded-lg mt-6 hover:bg-[#A84707]"}
-                        handleclick={() => { }}
-                    />
+
                     <OrderForm />
                 </div>
             </div>
