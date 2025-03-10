@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface QuantityState {
-    quantities: { [productId: string]: number }; // تخزين الكمية لكل منتج باستخدام productId كمفتاح
+    quantities: { [productId: string]: number };
 }
 
 const initialState: QuantityState = {
-    quantities: {}, // كائن فارغ
+    quantities: {},
 };
 
 export const quantitySlice = createSlice({
@@ -14,19 +14,29 @@ export const quantitySlice = createSlice({
     reducers: {
         increment: (state, action: PayloadAction<string>) => {
             const productId = action.payload;
-            state.quantities[productId] = (state.quantities[productId] || 0) + 1;
+            return {
+                ...state,
+                quantities: {
+                    ...state.quantities,
+                    [productId]: (state.quantities[productId] ?? 1) + 1,
+                },
+            };
         },
         decrement: (state, action: PayloadAction<string>) => {
             const productId = action.payload;
-            if (state.quantities[productId] > 1) {
-                state.quantities[productId] -= 1;
+            if (state.quantities[productId] && state.quantities[productId] > 1) {
+                return {
+                    ...state,
+                    quantities: {
+                        ...state.quantities,
+                        [productId]: state.quantities[productId] - 1,
+                    },
+                };
             }
+            return state;
         },
     },
 });
 
-// تصدير الـ actions
 export const { increment, decrement } = quantitySlice.actions;
-
-// تصدير الـ reducer
 export default quantitySlice.reducer;

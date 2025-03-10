@@ -13,17 +13,20 @@ module.exports = {
         background: "var(--background)",
         bgSecondColor: "var(--bg-second-color)",
         secondColor: "var(--second-color)",
-        color: "var(--border-color)"
+        color: "var(--border-color)",
+        hoverColor: "var(--hover-color)"
       },
     },
   },
   safelist: [
-    'text-mainColor',
+    'bg-background',
     'bg-mainColor',
     'bg-bgSecondColor',
-    'border-color',
-    'text-secondColor',
     'bg-secondColor',
+    'text-mainColor',
+    'text-secondColor',
+    'border-color',
+    'hover:bg-hoverColor',
     'text-[#BEB9B6]',
     'bg-[#0000006d]',
     { pattern: /.*/ }

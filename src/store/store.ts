@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import productReducer from '@/store/Slices/ProductSlice';
-import quantityReducer from './Slices/quantitySlice'; // استيراد quantitySlice.reducer
+// import productReducer from '@/store/Slices/ProductSlice';
+import feedbackSlice from '@/store/Slices/feedBackSlice';
+import quantityReducer from './Slices/quantitySlice';
 
 export const store = configureStore({
   reducer: {
-    products: productReducer,
-    quantity: quantityReducer, // إضافة quantitySlice.reducer هنا
+    // products: productReducer,
+    quantity: quantityReducer,
+    feedBack: feedbackSlice,
   },
 });
 

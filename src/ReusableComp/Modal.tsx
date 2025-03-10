@@ -1,9 +1,11 @@
+'use client'
 import { useEffect, useState } from "react";
+import Button from "./Button";
 
 // Higher-Order Component (HOC) لـ Modal
-export const withModal = (WrappedComponent: React.ComponentType<any>, props?: any, modalTitle?: string, btnTitle?: string, cssClasses?: string) => {
+export const withModal = (WrappedComponent: React.ComponentType<any>, modalTitle?: string, btnTitle?: string, cssClasses?: string) => {
     // Return a functional component
-    return () => {
+    return (props: any) => {
         const [isModalOpen, setIsModalOpen] = useState(false);
 
         const openModal = () => {
@@ -14,27 +16,26 @@ export const withModal = (WrappedComponent: React.ComponentType<any>, props?: an
             setIsModalOpen(false);
         };
 
-        useEffect(() => {
-            const handleEscape = (e: KeyboardEvent) => {
-                if (e.key === "Escape") closeModal();
-            };
+        // useEffect(() => {
+        //     const handleEscape = (e: KeyboardEvent) => {
+        //         if (e.key === "Escape") closeModal();
+        //     };
 
-            window.addEventListener("keydown", handleEscape);
+        //     window.addEventListener("keydown", handleEscape);
 
-            // Cleanup event listener
-            return () => {
-                window.removeEventListener("keydown", handleEscape);
-            };
-        }, []);
+        //     // Cleanup event listener
+        //     return () => {
+        //         window.removeEventListener("keydown", handleEscape);
+        //     };
+        // }, []);
 
         return (
             <div>
-                <button
-                    onClick={openModal}
-                    className={`${cssClasses}`}
-                >
-                    {btnTitle || "Open Modal"}
-                </button>
+                <Button
+                    handleclick={() => openModal()}
+                    cssClasses={`${cssClasses} w-full`}
+                    buttonName={btnTitle || "Open Modal"}
+                />
 
                 {/* الـ Modal */}
                 {isModalOpen && (

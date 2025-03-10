@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import NavBar from "@/components/navbar";
-import ClientProvider from "@/store/clientProvider";
-
+import { ClientProvider, ReactQueryClientProvider } from "@/store/clientProvider";
+import FeedbackMessage from "@/ReusableComp/feedBackMessage";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,8 +20,11 @@ export default function RootLayout({
         className={`antialiased  mx-auto `}
       >
         <ClientProvider>
-          <NavBar />
-          {children}
+          <ReactQueryClientProvider>
+            <NavBar />
+            {children}
+            <FeedbackMessage />
+          </ReactQueryClientProvider>
         </ClientProvider>
       </body>
     </html>

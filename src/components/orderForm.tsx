@@ -102,10 +102,11 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
                         </p>
                     </div>
                 ))}
-                <p>SubTotal ${(formData?.orderItems?.reduce((total, item) => total + item.price, 0) * quantityForPrice).toFixed(2)}</p>
+                <p>SubTotal ${(formData?.orderItems?.reduce((total, item) => total + item.price * item.quantity, 0))}</p>
+
             </div>
         </Form>
     );
 };
 
-export default withModal(OrderForm, "..", "orderForm", "Checkout", "w-full bg-[#B15D26] text-white py-2 rounded-lg mt-6 hover:bg-[#A84707]");
+export default withModal(OrderForm, "orderForm", "Checkouts", "w-full");
