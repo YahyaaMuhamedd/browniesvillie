@@ -24,7 +24,7 @@ export const OrderSumarry = ({ total }: orderSumarryProps) => {
                     </div>
                 </div>
 
-                <OrderForm />
+                <OrderForm onClose={() => { }} />
             </div>
         </>
     )

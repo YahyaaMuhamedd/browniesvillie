@@ -3,23 +3,25 @@ import { SelectInputByType } from "./selectInputByType";
 import Button from "../Button";
 
 interface FormField {
-    type: string; // "text", "email", "number", "textarea", "select"
+    type: string;
     name: string;
     label: string;
     placeholder?: string;
-    options?: { label: string; value: string }[]; // For select inputs
+    options?: { label: string; value: string }[];
 }
 
 interface FormProps {
-    formData: Record<string, any>; // Form data state
-    fields: FormField[]; // Explicit field configuration
+    formData: Record<string, any>;
+    fields: FormField[];
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-    handleSelectChange: (fieldName: string, selectedOption: string | null) => void;
     handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-    errors?: Record<string, string>; // Validation errors
-    cssClasses?: string; // Custom CSS classes for the form
-    children?: React.ReactNode; // Additional content (e.g., custom fields, buttons)
+    buttonName: string
+    handleSelectChange: (fieldName: string, selectedOption: string | null) => void;
+    errors?: Record<string, string>;
+    cssClasses?: string;
+    children?: React.ReactNode;
     options?: { label: string; value: string }[];
+    BtnCssClasses?: string
 }
 
 export const Form: React.FC<FormProps> = ({
@@ -31,6 +33,8 @@ export const Form: React.FC<FormProps> = ({
     errors,
     cssClasses,
     children,
+    buttonName,
+    BtnCssClasses
 }) => {
     return (
         <form onSubmit={handleSubmit} className={`space-y-4 ${cssClasses || ""}`}>
@@ -55,9 +59,10 @@ export const Form: React.FC<FormProps> = ({
             {children}
 
             <Button
-                buttonName="Submit Order"
-                cssClasses="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+                buttonName={buttonName}
                 type="submit"
+                handleclick={() => { }}
+                cssClasses={BtnCssClasses}
             />
         </form>
     );

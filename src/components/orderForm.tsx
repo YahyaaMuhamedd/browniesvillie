@@ -2,11 +2,14 @@ import { useEffect } from "react";
 import { CreateOrder } from "@/services/orderServices";
 import { withModal } from "@/ReusableComp/Modal";
 import { ArrayConverter } from "@/helpers/arrayConverter";
-import { useAppSelector } from "@/hooks/Redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/Redux";
 import { RootState } from "@/store/store";
-import { OrderFormData } from "@/types/orderTypes";
+import { OrderFormData } from "@/types/formTypes";
 import { useInputChange } from "@/hooks/useInputsChange";
 import { Form } from "@/ReusableComp/forms/Form";
+import { setToken } from "@/store/Slices/authSlice";
+import { orderFormFields } from "@/ReusableComp/forms/fields";
+import { fetchUserData } from "@/services/userServices";
 
 interface OrderFormProps {
     onClose: () => void;
@@ -26,6 +29,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
     });
 
     const quantities = useAppSelector((state: RootState) => state.quantity.quantities);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         const cartLocalStorage = localStorage.getItem('cart');
@@ -46,52 +50,44 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
 
     }, [quantities]);
 
-    const quantityForPrice = quantities[formData?.orderItems?.map((item) => item.productId)[0]] || 1; // Corrected line
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
             const response = await CreateOrder(formData);
-            console.log("Order created successfully:", response);
-            alert("Order created successfully!");
-            onClose(); // Close the modal after successful submission
+
+            if (response) {
+                console.log("Order created successfully:", response);
+
+                // ✅ Set token in Redux
+                dispatch(setToken(response?.token));
+
+                dispatch(fetchUserData(response.data.loginUser._id));
+
+                alert("Order created successfully!");
+                onClose();
+            } else {
+                console.error("No response received from CreateOrder.");
+                alert("Failed to create order. Please try again.");
+            }
         } catch (error) {
             console.error("Failed to create order:", error);
             alert("Failed to create order. Please try again.");
         }
     };
-
-    // Define the form fields
-    const fields = [
-        { type: "text", name: "name", label: "Name" },
-        { type: "email", name: "email", label: "Email" },
-        { type: "tel", name: "phone", label: "Phone" },
-        { type: "text", name: "address", label: "Address" },
-        { type: "number", name: "floor", label: "Floor" },
-        { type: "number", name: "apartment", label: "Apartment" },
-        { type: "textarea", name: "description", label: "Description" },
-        {
-            type: "select",
-            name: "paymentMethod",
-            label: "Payment Method",
-            options: [
-                { label: "Cash", value: "cash" },
-                { label: "Instapay", value: "instapay" },
-                { label: "Vodafone Cash", value: "vodafone cash" },
-            ],
-        },
-    ];
+    ;
 
     return (
         <Form
             formData={formData}
-            fields={fields}
+            fields={orderFormFields}
             handleInputChange={handleInputChange}
             handleSelectChange={handleSelectChange}
             handleSubmit={handleSubmit}
             cssClasses="space-y-4"
-
+            buttonName="Submit Order"
+            BtnCssClasses="w-full text-center"
         >
             <div>
                 <h3 className="text-lg font-semibold mb-2">Selected Products</h3>

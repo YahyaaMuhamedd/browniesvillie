@@ -20,7 +20,7 @@ const Cart: React.FC = () => {
     useEffect(() => {
 
         const fetchCart = async () => {
-            const cartLocalStorage = localStorage.getItem("cart");
+            const cartLocalStorage = await localStorage.getItem("cart");
             if (cartLocalStorage) {
                 setCart(ArrayConverter(cartLocalStorage));
             }
@@ -38,22 +38,22 @@ const Cart: React.FC = () => {
                 {/* قائمة المنتجات */}
                 <div className="md:col-span-2">
                     {cart?.map((item: Product) => {
-                        const quantity = quantities[item._id] || 1; // قيمة افتراضية للكمية إذا لم تكن موجودة
+                        const quantity = quantities[item._id] || 1;
                         return (
-                            <div key={item._id} className="bg-bgSecondColor p-4 rounded-lg border border-color mb-4">
-                                <div className="flex justify-between">
+                            <div key={item._id} className="bg-bgSecondColor p-2 rounded-lg border border-color mb-4">
+                                <div className="flex justify-between max-sm:justify-center flex-wrap items-center gap-4">
 
-                                    <div className="flex items-center space-x-4">
+                                    <div className="flex items-center flex-wrap justify-center flex-col">
                                         {item.image && (
                                             <Image
                                                 src={item.image}
                                                 width={250}
                                                 height={250}
                                                 alt={item.title}
-                                                className="rounded-lg mb-4"
+                                                className="rounded-lg mb-4 max-sm:w-full max-sm:h-full"
                                             />
                                         )}
-                                        <div>
+                                        <div className="flex justify-center items-center flex-col">
                                             <h2 className="text-xl font-semibold">{item.title}</h2>
                                             <p className="text-secondColor">${item.price.toFixed(2)}</p>
                                             <div className="flex items-center mt-4">
@@ -80,7 +80,7 @@ const Cart: React.FC = () => {
 
                                         <Button
                                             buttonName="Remove"
-                                            cssClasses=" px-4 hover:bg-hoverColor "
+                                            cssClasses="px-4 hover:bg-hoverColor flex justify-end items-end"
                                             handleclick={() => {
                                                 removeItemFromLocalStorage({ key: cart, value: item, setCart }),
                                                     dispatch(setMessage(`${item.title} Removed From Cart`)),

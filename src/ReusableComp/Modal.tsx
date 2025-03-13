@@ -1,12 +1,19 @@
-'use client'
-import { useEffect, useState } from "react";
+"use client";
+
+import { useState, useEffect } from "react";
 import Button from "./Button";
 
-// Higher-Order Component (HOC) لـ Modal
-export const withModal = (WrappedComponent: React.ComponentType<any>, modalTitle?: string, btnTitle?: string, cssClasses?: string) => {
-    // Return a functional component
-    return (props: any) => {
+
+// Higher-Order Component (HOC) for Modal
+export const withModal = <P extends object>(
+    WrappedComponent: React.ComponentType<P>,
+    modalTitle: string = "Modal",
+    btnTitle: string = "Open Modal",
+    cssClasses: string = "",
+) => {
+    return (props: P) => {
         const [isModalOpen, setIsModalOpen] = useState(false);
+        const [dynamicTitle, setDynamicTitle] = useState(modalTitle);
 
         const openModal = () => {
             setIsModalOpen(true);
@@ -16,34 +23,39 @@ export const withModal = (WrappedComponent: React.ComponentType<any>, modalTitle
             setIsModalOpen(false);
         };
 
-        // useEffect(() => {
-        //     const handleEscape = (e: KeyboardEvent) => {
-        //         if (e.key === "Escape") closeModal();
-        //     };
+        useEffect(() => {
+            const handleEscape = (e: KeyboardEvent) => {
+                if (e.key === "Escape") closeModal();
+            };
 
-        //     window.addEventListener("keydown", handleEscape);
+            const handleClickOutside = (e: MouseEvent) => {
+                if ((e.target as HTMLElement).id === "modal-overlay") {
+                    closeModal();
+                }
+            };
 
-        //     // Cleanup event listener
-        //     return () => {
-        //         window.removeEventListener("keydown", handleEscape);
-        //     };
-        // }, []);
+            window.addEventListener("keydown", handleEscape);
+            window.addEventListener("mousedown", handleClickOutside);
+
+            return () => {
+                window.removeEventListener("keydown", handleEscape);
+                window.removeEventListener("mousedown", handleClickOutside);
+            };
+        }, []);
 
         return (
-            <div>
+            <>
                 <Button
-                    handleclick={() => openModal()}
-                    cssClasses={`${cssClasses} w-full`}
-                    buttonName={btnTitle || "Open Modal"}
+                    handleclick={openModal}
+                    cssClasses={`${cssClasses}`}
+                    buttonName={btnTitle}
                 />
 
-                {/* الـ Modal */}
                 {isModalOpen && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 ">
-                        <div className="bg-white rounded-lg p-6 w-full max-w-lg overflow-y-auto h-[90vh]">
-                            {/* عنوان الـ Modal */}
+                    <div id="modal-overlay" className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                        <div className="bg-white rounded-lg p-6 w-full max-w-lg overflow-y-auto max-h-full">
                             <div className="flex justify-between items-center mb-4">
-                                {modalTitle && <h2 className="text-2xl font-bold">{modalTitle}</h2>}
+                                <h2 className={`text-2xl font-bold text-mainColor text-center w-full`}>{dynamicTitle}</h2>
                                 <button
                                     onClick={closeModal}
                                     className="text-gray-500 hover:text-gray-700"
@@ -51,13 +63,11 @@ export const withModal = (WrappedComponent: React.ComponentType<any>, modalTitle
                                     &times;
                                 </button>
                             </div>
-
-                            {/* المحتوى */}
-                            <WrappedComponent {...props} onClose={closeModal} />
+                            <WrappedComponent {...props} onClose={closeModal} setDynamicTitle={setDynamicTitle} />
                         </div>
                     </div>
                 )}
-            </div>
+            </>
         );
     };
 };

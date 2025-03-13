@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
   },
   env: {
     DOMAIN: 'https://brownies-villie-back-end.vercel.app/api/',
-    TOKEN: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2I5ZTEyN2RiZmY1ZGUyYzRhOWY1ODkiLCJlbWFpbCI6Im11dGF6QGV4YW1wbGUuY29tIiwiaWF0IjoxNzQwMjQxMjgyLCJleHAiOjE3NDA1MDA0ODJ9.gRLDmYqV1UTTZo0M2Wxpe_XppBUtPMODYzSfXZq_JZg'
+    TOKEN: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QyZjA2YzI5NzU5MTA5ODIzNjE5MzIiLCJlbWFpbCI6Im5hc2FzZHNhc0BleGFtcGxlLmNvbSIsImlhdCI6MTc0MTg4MDI1MiwiZXhwIjoxNzQzMDg5ODUyfQ.LM9MQODvBqhRPQaRACzWWpDdxTj4NbOuEKMnQVZ_WNc'
   },
   eslint: {
     ignoreDuringBuilds: true, // Disable ESLint during builds

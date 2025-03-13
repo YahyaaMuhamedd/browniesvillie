@@ -53,7 +53,7 @@ const ProductCard: React.FC = () => {
                     return (
                         <div
                             key={product._id}
-                            className="border-4 border-color border-opacity-80 rounded-lg flex flex-col justify-center items-center p-6 bg-bgSecondColor shadow-lg hover:shadow-xl transition-shadow duration-300 hover:scale-105"
+                            className="border-2 border-color border-opacity-80 rounded-lg flex flex-col justify-center items-center p-6 bg-transparent shadow-lg hover:shadow-xl transition-shadow duration-300 hover:scale-105"
                         >
                             {product.image && (
                                 <Image

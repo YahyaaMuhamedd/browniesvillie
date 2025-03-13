@@ -16,3 +16,14 @@ export interface OrderFormData {
     paymentMethod: string;
     orderItems: Array<{ productId: string; name: string; quantity: number; price: number }>
 }
+
+export interface LoginFormData {
+    email: string;
+    phone: string;
+}
+
+export interface RegisterFormData {
+    name: string;
+    email: string;
+    phone: string;
+}

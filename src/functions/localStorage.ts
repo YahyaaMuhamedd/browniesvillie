@@ -7,10 +7,10 @@ interface LocalStorageItem {
     setCart?: React.Dispatch<React.SetStateAction<Product[]>> | any
 }
 
-export const addToLocalStorage = ({ key, value }: LocalStorageItem) => {
+export const addToLocalStorage = async ({ key, value }: LocalStorageItem) => {
 
     try {
-        let existingItem = localStorage.getItem(key);
+        let existingItem = await localStorage.getItem(key);
         let newValue: any = {};
 
         if (existingItem) {
@@ -26,7 +26,7 @@ export const addToLocalStorage = ({ key, value }: LocalStorageItem) => {
 
         newValue[value._id] = value;
 
-        localStorage.setItem(key, JSON.stringify(newValue));
+        await localStorage.setItem(key, JSON.stringify(newValue));
         console.log(`Updated localStorage for key "${key}":`, newValue);
         dispatchCartUpdatedEvent();
 
