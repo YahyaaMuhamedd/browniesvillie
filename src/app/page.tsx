@@ -1,13 +1,16 @@
-import SwipperSlider from "@/components/Slider/headerSlider";
-import ProductCard from "@/ReusableComp/ProductCard";
-import { Title } from "@/ReusableComp/titles";
+import React, { Suspense } from "react";
+const SwipperSlider = React.lazy(() => import("@/components/Slider/headerSlider"));
+const ProductCard = React.lazy(() => import("@/ReusableComp/ProductCard"));
+const Title = React.lazy(() => import("@/ReusableComp/titles"));
 
 export default function Home() {
   return (
     <>
-      <SwipperSlider />
-      <Title title="Our Products" cssClasses=" text-mainColor flex justify-center items-center " />
-      <ProductCard />
+      <Suspense fallback={<div>Loading...</div>}>
+        <SwipperSlider />
+        <Title title="Our Products" cssClasses=" text-mainColor flex justify-center items-center " />
+        <ProductCard />
+      </Suspense>
     </>
   );
 }

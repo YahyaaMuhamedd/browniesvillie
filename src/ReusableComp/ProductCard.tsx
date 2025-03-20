@@ -46,14 +46,14 @@ const ProductCard: React.FC = () => {
 
     return (
         <>
-            <div className="grid grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-6 contain mx-auto px-4 max-md:px-2">
-                {data.map((product: Product) => {
+            <div className="grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-6 contain mx-auto px-4 max-md:px-2">
+                {data?.map((product: Product) => {
                     const existingProduct = cart.find((item) => item._id === product._id);
 
                     return (
                         <div
                             key={product._id}
-                            className="border-2 border-color border-opacity-80 rounded-lg flex flex-col justify-center items-center p-6 bg-transparent shadow-lg hover:shadow-xl transition-shadow duration-300 hover:scale-105"
+                            className="border-2 border-color border-opacity-80 rounded-lg p-1 bg-transparent shadow-lg hover:shadow-xl transition-shadow duration-300 hover:scale-105"
                         >
                             {product.image && (
                                 <Image
@@ -61,33 +61,36 @@ const ProductCard: React.FC = () => {
                                     width={200}
                                     height={200}
                                     alt={product.title}
-                                    className="rounded-lg mb-4"
+                                    className="rounded-lg mb-4 w-full h-48 object-cover"
                                 />
                             )}
-                            <h2 className="text-3xl capitalize text-mainColor text-center font-bold mb-2 m-auto">
-                                {product.title}
-                            </h2>
-                            <h2 className="text-mainColor text-lg text-center mb-2 m-auto">
-                                {product.description}
-                            </h2>
-                            <p className="text-xl font-semibold text-mainColor">${product.price}</p>
-                            <Button
-                                cssClasses="bg-mainColor hover:bg-hoverColor text-white"
-                                buttonName="Add to Cart"
-                                handleclick={() => {
-                                    if (existingProduct) {
-                                        dispatch(setMessage("Product Already In Cart"));
-                                        dispatch(setHrefLocation("Cart"));
-                                    } else {
-                                        addToLocalStorage({
-                                            key: 'cart',
-                                            value: product,
-                                        });
-                                        dispatch(setMessage(`${product.title} Added To Cart`));
-                                        dispatch(setHrefLocation('Cart'));
-                                    }
-                                }}
-                            />
+                            <div className="p-4 flex flex-col justify-center items-center">
+
+                                <h2 className="text-3xl capitalize text-mainColor text-center font-bold mb-2 m-auto">
+                                    {product.title}
+                                </h2>
+                                <h2 className="text-mainColor text-lg text-center mb-2 m-auto">
+                                    {product.description}
+                                </h2>
+                                <p className="text-xl font-semibold text-mainColor">${product.price}</p>
+                                <Button
+                                    cssClasses="bg-mainColor hover:bg-hoverColor text-white"
+                                    buttonName="Add to Cart"
+                                    handleclick={() => {
+                                        if (existingProduct) {
+                                            dispatch(setMessage("Product Already In Cart"));
+                                            dispatch(setHrefLocation("Cart"));
+                                        } else {
+                                            addToLocalStorage({
+                                                key: 'cart',
+                                                value: product,
+                                            });
+                                            dispatch(setMessage(`${product.title} Added To Cart`));
+                                            dispatch(setHrefLocation('Cart'));
+                                        }
+                                    }}
+                                />
+                            </div>
                         </div>
                     );
                 })}

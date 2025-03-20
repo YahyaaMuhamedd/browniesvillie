@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import FavoriteIcon from "@/assets/SVG/favorite";
 import ShoppingcartIcon from "@/assets/SVG/shopping_cart_checkout";
 import Link from "next/link";
@@ -9,9 +9,11 @@ import useCartLength from "@/hooks/useCartLength";
 import { useAppDispatch, useAppSelector } from "@/hooks/Redux";
 import { RootState } from "@/store/store";
 import { fetchUserData } from "@/services/userServices";
-import Button from "@/ReusableComp/Button";
-import AuthModal from "./Auth/authModel";
 import { setToken } from "@/store/Slices/authSlice";
+import BurgerIcon from "@/assets/BurgerIcon";
+import { capitalizeFirstLetter } from "@/helpers/capitalizeFirstLetter";
+import User from "@/assets/SVG/person";
+const AuthModal = React.lazy(() => import("./Auth/authModel"));
 
 const Navbar: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -42,9 +44,10 @@ const Navbar: React.FC = () => {
         }
     }, [dispatch]);
 
-    const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+    const toggleMenu = useCallback(() => setIsMenuOpen((prev) => !prev), []);
 
-    const navLinks = ["Menu", "Best Seller", "About Us", "Contact Us"];
+    const navLinks = useMemo(() => ["Menu", "Best Seller", "About Us", "Contact Us"], []);
+
     const isMounted = typeof window !== "undefined";
 
     return (
@@ -52,27 +55,30 @@ const Navbar: React.FC = () => {
             <div className="py-4 px-6 flex items-center justify-between z-50 mb-10">
                 <BrawniesvllieLogo />
                 {isMounted && isDesktop ? (
-                    <div className="flex space-x-4 justify-between">
+                    <div className="flex space-x-4 justify-between items-center">
                         <Link href="/Cart" className="text-secondColor cursor-pointer relative">
                             <span className="absolute bg-red-600 w-5 h-5 rounded-full -top-2 -right-2 text-secondColor flex items-center justify-center text-center text-sm">
                                 {cartLength || 0}
                             </span>
                             <ShoppingcartIcon />
                         </Link>
-                        <div className="w-full">
+                        <div className="w-full cursor-pointer">
                             <FavoriteIcon />
+                        </div>
+                        <div className="w-full cursor-pointer">
+                            {isAuthenticated ? <User /> : null}
                         </div>
                         {!isAuthenticated ? (
                             <AuthModal onClose={() => { }} setDynamicTitle={() => { }} />
                         ) : (
-                            <div className="flex items-center gap-2 flex-row">
-                                <p>Hello</p>
-                                <p className="text-secondColor text-2xl">{user?.name?.split(" ")[0]}</p>
+                            <div className="flex items-start gap-[2px] flex-col justify-start">
+                                <p className="text-mainColor text-lg font-semibold">Hello</p>
+                                <p className="text-secondColor text-2xl font-bold"> {capitalizeFirstLetter(user?.name?.split(" ")[0])} </p>
                             </div>
                         )}
                     </div>
                 ) : (
-                    <Button handleclick={toggleMenu} buttonName="Open Menu" cssClasses="w-fit" />
+                    <BurgerIcon isOpen={isMenuOpen} toggle={toggleMenu} />
                 )}
             </div>
 
@@ -84,7 +90,7 @@ const Navbar: React.FC = () => {
                 </div>
             )}
 
-            {isMounted && isMenuOpen && (
+            {isMounted && isMenuOpen && !isDesktop && (
                 <div className="w-full bg-bgSecondColor p-4 flex flex-col items-center">
                     {navLinks.map((link, index) => (
                         <Link key={index} href="/" className="w-full text-secondColor">{link}</Link>
@@ -100,7 +106,10 @@ const Navbar: React.FC = () => {
                         {!isAuthenticated ? (
                             <AuthModal onClose={() => { }} setDynamicTitle={() => { }} />
                         ) : (
-                            <p className="text-secondColor text-2xl">{user?.name?.split(" ")[0]}</p>
+                            <div className="flex items-start gap-[2px] flex-col justify-start">
+                                <p className="text-mainColor text-lg font-semibold">Hello</p>
+                                <p className="text-secondColor text-2xl font-bold"> {capitalizeFirstLetter(user?.name?.split(" ")[0])} </p>
+                            </div>
                         )}
                     </div>
                 </div>

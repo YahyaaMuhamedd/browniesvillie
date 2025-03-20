@@ -1,13 +1,15 @@
-import OrderForm from "../orderForm"
+import React from "react"
+
+const OrderForm = React.lazy(() => import("../orderForm"));
 
 interface orderSumarryProps {
     total: number
 }
-export const OrderSumarry = ({ total }: orderSumarryProps) => {
+const OrderSumarry = ({ total }: orderSumarryProps) => {
     return (
         <>
             {/* ملخص الطلب */}
-            <div className="bg-bgSecondColor p-6 rounded-lg border border-color h-fit">
+            <div className="bg-bgSecondColor p-4 rounded-lg border border-color h-fit">
                 <h2 className="text-2xl font-bold text-mainColor mb-4">Order Summary</h2>
                 <div className="space-y-4">
                     <div className="flex justify-between">
@@ -30,4 +32,4 @@ export const OrderSumarry = ({ total }: orderSumarryProps) => {
     )
 }
 
-
+export default OrderSumarry

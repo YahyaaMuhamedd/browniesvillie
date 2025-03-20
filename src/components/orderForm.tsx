@@ -57,13 +57,14 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
         try {
             const response = await CreateOrder(formData);
 
+            const userId: any = localStorage.setItem('userId', response.order.userId);
             if (response) {
                 console.log("Order created successfully:", response);
-
                 // ✅ Set token in Redux
                 dispatch(setToken(response?.token));
-
-                dispatch(fetchUserData(response.data.loginUser._id));
+                const getUserId: any = localStorage.getItem('userId')
+                console.log(getUserId)
+                dispatch(fetchUserData(getUserId));
 
                 alert("Order created successfully!");
                 onClose();
