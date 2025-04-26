@@ -8,33 +8,36 @@ interface LocalStorageItem {
 }
 
 export const addToLocalStorage = async ({ key, value }: LocalStorageItem) => {
-
     try {
-        let existingItem = await localStorage.getItem(key);
-        let newValue: any = {};
+        let existingCart = localStorage.getItem(key);
+        let cartArray: Product[] = [];
 
-        if (existingItem) {
+        if (existingCart) {
             try {
-                newValue = JSON.parse(existingItem) || {};
-                newValue[value._id] = value;
-                localStorage.setItem(key, JSON.stringify(newValue));
+                cartArray = JSON.parse(existingCart) || [];
             } catch (error) {
                 console.warn(`Invalid JSON in localStorage for key "${key}", resetting.`);
-                newValue = {};
+                cartArray = [];
             }
         }
 
-        newValue[value._id] = value;
+        // Check if product already exists to prevent duplication
+        const productExists = cartArray.some((item) => item._id === value._id);
 
-        await localStorage.setItem(key, JSON.stringify(newValue));
-        console.log(`Updated localStorage for key "${key}":`, newValue);
-        dispatchCartUpdatedEvent();
-
+        if (!productExists) {
+            cartArray.push(value);
+            localStorage.setItem(key, JSON.stringify(cartArray));
+            dispatchCartUpdatedEvent();
+            console.log(`Updated cart in localStorage:`, cartArray);
+        } else {
+            console.log("Product already in cart, not adding again.");
+        }
 
     } catch (err) {
         console.error("Error updating localStorage:", err);
     }
 };
+
 
 
 

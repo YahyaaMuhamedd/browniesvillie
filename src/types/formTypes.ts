@@ -14,6 +14,8 @@ export interface OrderFormData {
     apartment: string;
     description: string;
     paymentMethod: string;
+    phoneThatPaid: string;
+    referenceNumber: string;
     orderItems: Array<{ productId: string; name: string; quantity: number; price: number }>
 }
 

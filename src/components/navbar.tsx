@@ -18,7 +18,7 @@ const AuthModal = React.lazy(() => import("./Auth/authModel"));
 const Navbar: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const isDesktop = useWindowSize();
-    const cartLength = useCartLength();
+    const { length } = useCartLength();
     const dispatch = useAppDispatch();
     const { user, isAuthenticated } = useAppSelector((state: RootState) => state.user);
     const { token, userId } = useAppSelector((state: RootState) => state.auth);
@@ -41,6 +41,7 @@ const Navbar: React.FC = () => {
         if (storedToken && storedUserId) {
             dispatch(setToken(storedToken)); // Set token in Redux
             dispatch(fetchUserData(storedUserId)); // Fetch user data
+            console.log(dispatch(fetchUserData(storedUserId)))
         }
     }, [dispatch]);
 
@@ -53,12 +54,14 @@ const Navbar: React.FC = () => {
     return (
         <nav className="contain mx-auto mb-8 max-md:mb-0">
             <div className="py-4 px-6 flex items-center justify-between z-50 mb-10">
-                <BrawniesvllieLogo />
+                <Link href="/" className="flex items-center gap-2">
+                    <BrawniesvllieLogo />
+                </Link>
                 {isMounted && isDesktop ? (
                     <div className="flex space-x-4 justify-between items-center">
                         <Link href="/Cart" className="text-secondColor cursor-pointer relative">
                             <span className="absolute bg-red-600 w-5 h-5 rounded-full -top-2 -right-2 text-secondColor flex items-center justify-center text-center text-sm">
-                                {cartLength || 0}
+                                {length || 0}
                             </span>
                             <ShoppingcartIcon />
                         </Link>
@@ -98,7 +101,7 @@ const Navbar: React.FC = () => {
                     <div className="flex justify-evenly mt-3 w-full">
                         <Link href="/Cart" className="text-secondColor cursor-pointer relative">
                             <p className="absolute bg-red-600 w-5 h-5 rounded-full top-0 right-0 text-secondColor flex items-center justify-center text-sm">
-                                {cartLength || 0}
+                                {length || 0}
                             </p>
                             <ShoppingcartIcon />
                         </Link>

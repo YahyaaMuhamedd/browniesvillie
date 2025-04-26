@@ -10,6 +10,7 @@ export const withModal = <P extends object>(
     modalTitle: string = "Modal",
     btnTitle: string = "Open Modal",
     cssClasses: string = "",
+    disabled?: boolean
 ) => {
     return (props: P) => {
         const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,8 +48,10 @@ export const withModal = <P extends object>(
             <>
                 <Button
                     handleclick={openModal}
-                    cssClasses={`${cssClasses}`}
+                    cssClasses={`${cssClasses} ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
                     buttonName={btnTitle}
+                    disabled={disabled}
+                    type="button"
                 />
 
                 {isModalOpen && (
@@ -58,7 +61,8 @@ export const withModal = <P extends object>(
                                 <h2 className={`text-2xl font-bold text-mainColor text-center w-full`}>{dynamicTitle}</h2>
                                 <button
                                     onClick={closeModal}
-                                    className="text-gray-500 hover:text-gray-700"
+                                    className={`text-gray-500 hover:text-gray-700 `}
+                                    aria-label="Close modal"
                                 >
                                     &times;
                                 </button>

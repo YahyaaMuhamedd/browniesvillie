@@ -1,3 +1,4 @@
+"use client";
 import { useEffect } from "react";
 import { CreateOrder } from "@/services/orderServices";
 import { withModal } from "@/ReusableComp/Modal";
@@ -8,8 +9,10 @@ import { OrderFormData } from "@/types/formTypes";
 import { useInputChange } from "@/hooks/useInputsChange";
 import { Form } from "@/ReusableComp/forms/Form";
 import { setToken } from "@/store/Slices/authSlice";
-import { orderFormFields } from "@/ReusableComp/forms/fields";
+import { instaOrVodafonePaid, orderFormFields } from "@/ReusableComp/forms/fields";
 import { fetchUserData } from "@/services/userServices";
+import useCartLength from "@/hooks/useCartLength";
+import Title from "@/ReusableComp/titles";
 
 interface OrderFormProps {
     onClose: () => void;
@@ -25,14 +28,21 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
         apartment: "",
         description: "",
         paymentMethod: "",
+        phoneThatPaid: "",
+        referenceNumber: "",
         orderItems: [],
     });
 
+    const allFields = formData.paymentMethod === "instaPay" || formData.paymentMethod === "Vodafone Cash"
+        ? [...orderFormFields, ...instaOrVodafonePaid]
+        : orderFormFields;
+
     const quantities = useAppSelector((state: RootState) => state.quantity.quantities);
     const dispatch = useAppDispatch();
+    const { length } = useCartLength();
 
     useEffect(() => {
-        const cartLocalStorage = localStorage.getItem('cart');
+        const cartLocalStorage = localStorage.getItem("cart");
         const cart = ArrayConverter(cartLocalStorage);
 
         if (cart.length > 0) {
@@ -42,47 +52,34 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
                 quantity: quantities[item._id] || 1,
                 price: item.price,
             }));
-
             updateOrderItems(orderItems);
-
         }
-        console.log("Updated formData:", formData);
-
     }, [quantities]);
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         try {
             const response = await CreateOrder(formData);
-
-            const userId: any = localStorage.setItem('userId', response.order.userId);
+            localStorage.setItem("userId", response.order.userId);
             if (response) {
-                console.log("Order created successfully:", response);
-                // ✅ Set token in Redux
                 dispatch(setToken(response?.token));
-                const getUserId: any = localStorage.getItem('userId')
-                console.log(getUserId)
-                dispatch(fetchUserData(getUserId));
-
+                dispatch(fetchUserData(response.order.userId));
                 alert("Order created successfully!");
                 onClose();
             } else {
-                console.error("No response received from CreateOrder.");
                 alert("Failed to create order. Please try again.");
             }
         } catch (error) {
-            console.error("Failed to create order:", error);
             alert("Failed to create order. Please try again.");
         }
     };
-    ;
+
+    if (length === 0) return <Title title="Your Cart is Empty" cssClasses=" text-mainColor flex justify-center items-center " />;
 
     return (
         <Form
             formData={formData}
-            fields={orderFormFields}
+            fields={allFields}
             handleInputChange={handleInputChange}
             handleSelectChange={handleSelectChange}
             handleSubmit={handleSubmit}
@@ -99,11 +96,12 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
                         </p>
                     </div>
                 ))}
-                <p>SubTotal ${(formData?.orderItems?.reduce((total, item) => total + item.price * item.quantity, 0))}</p>
-
+                <p>SubTotal: ${formData?.orderItems?.reduce((total, item) => total + item.price * item.quantity, 0)}</p>
             </div>
         </Form>
     );
 };
+
+
 
 export default withModal(OrderForm, "orderForm", "Checkouts", "w-full");

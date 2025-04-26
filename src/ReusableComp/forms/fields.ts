@@ -12,11 +12,16 @@ export const orderFormFields = [
         label: "Payment Method",
         options: [
             { label: "Cash", value: "cash" },
-            { label: "Instapay", value: "instapay" },
-            { label: "Vodafone Cash", value: "vodafone cash" },
+            { label: "Instapay", value: "instaPay" },
+            { label: "Vodafone Cash", value: "Vodafone Cash" },
         ],
     },
 ];
+
+export const instaOrVodafonePaid = [
+    { type: "text", name: "phoneThatPaid", label: "Phone That Paid" },
+    { type: "text", name: "referenceNumber", label: "Reference Number" },
+]
 
 export const loginFields = [
     { type: "email", name: "email", label: "Email" },

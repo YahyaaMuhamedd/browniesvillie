@@ -57,7 +57,7 @@ const ProductCard: React.FC = () => {
                         >
                             {product.image && (
                                 <Image
-                                    src={product.image}
+                                    src={product?.image}
                                     width={200}
                                     height={200}
                                     alt={product.title}
@@ -67,12 +67,12 @@ const ProductCard: React.FC = () => {
                             <div className="p-4 flex flex-col justify-center items-center">
 
                                 <h2 className="text-3xl capitalize text-mainColor text-center font-bold mb-2 m-auto">
-                                    {product.title}
+                                    {product?.title}
                                 </h2>
                                 <h2 className="text-mainColor text-lg text-center mb-2 m-auto">
-                                    {product.description}
+                                    {product?.description}
                                 </h2>
-                                <p className="text-xl font-semibold text-mainColor">${product.price}</p>
+                                <p className="text-xl font-semibold text-mainColor">${product?.price}</p>
                                 <Button
                                     cssClasses="bg-mainColor hover:bg-hoverColor text-white"
                                     buttonName="Add to Cart"

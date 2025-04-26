@@ -8,6 +8,7 @@ interface SelectInputByTypeProps {
     fieldData: { type: string; value: any, options: { label: string; value: string }[] };
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     handleSelectChange: (fieldName: string, selectedOption: string | null) => void;
+    label: string;
 }
 
 export const SelectInputByType: React.FC<SelectInputByTypeProps> = ({
@@ -15,6 +16,7 @@ export const SelectInputByType: React.FC<SelectInputByTypeProps> = ({
     fieldData,
     handleInputChange,
     handleSelectChange,
+    label,
 }) => {
     const { type, value, options } = fieldData;
 
@@ -25,7 +27,7 @@ export const SelectInputByType: React.FC<SelectInputByTypeProps> = ({
                     formData={value}
                     handleInputChange={handleInputChange}
                     type="text"
-                    label={capitalizeFirstLetter(fieldName)}
+                    label={capitalizeFirstLetter(label)}
                     name={fieldName}
                     placeholder={`Enter your ${fieldName}`}
                 />
@@ -35,7 +37,7 @@ export const SelectInputByType: React.FC<SelectInputByTypeProps> = ({
                 <TextAreaInput
                     formData={value}
                     handleInputChange={handleInputChange}
-                    label={capitalizeFirstLetter(fieldName)}
+                    label={capitalizeFirstLetter(label)}
                     name={fieldName}
                     placeholder={`Enter your ${fieldName}`}
                 />
@@ -44,7 +46,7 @@ export const SelectInputByType: React.FC<SelectInputByTypeProps> = ({
             console.log("Rendering SelectInput with:", { fieldName, value, options });
             return (
                 <SelectInput
-                    label={capitalizeFirstLetter(fieldName)}
+                    label={capitalizeFirstLetter(label)}
                     name={fieldName}
                     value={value}
                     handleSelectChange={(selectedValue) => handleSelectChange(fieldName, selectedValue || "")}
@@ -57,7 +59,7 @@ export const SelectInputByType: React.FC<SelectInputByTypeProps> = ({
                     formData={value}
                     handleInputChange={handleInputChange}
                     type={type}
-                    label={capitalizeFirstLetter(fieldName)}
+                    label={capitalizeFirstLetter(label)}
                     name={fieldName}
                     placeholder={`Enter your ${fieldName}`}
                 />

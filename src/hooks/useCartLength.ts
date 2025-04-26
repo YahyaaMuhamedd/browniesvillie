@@ -1,4 +1,4 @@
-// hooks/useCartLength.ts
+'use client';
 import { useEffect, useState } from "react";
 import { ArrayConverter } from "@/helpers/arrayConverter";
 
@@ -33,7 +33,7 @@ const useCartLength = () => {
         };
     }, []);
 
-    return length;
+    return { length };
 };
 
 export default useCartLength;

@@ -47,6 +47,7 @@ export const Form: React.FC<FormProps> = ({
                             value: formData[field.name] || "", // Corrected this
                             options: field.options || []
                         }}
+                        label={field.label}
                         handleInputChange={handleInputChange}
                         handleSelectChange={handleSelectChange}
                     />
