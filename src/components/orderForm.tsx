@@ -101,6 +101,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
             localStorage.setItem("userId", response.order.userId);
             if (response) {
                 dispatch(setToken(response?.token));
+                localStorage.setItem("token", response?.token);
                 dispatch(fetchUserData(response.order.userId));
                 setMessage("Order created successfully!");
                 setLoading(false);
@@ -109,33 +110,75 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
                 setLoading(false);
                 setMessage("Failed to create order. Please try again.");
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             setLoading(false);
-            setMessage("Failed to create order. Please try again.");
+            console.log("Error creating order:", error?.response?.data);
+            console.log("Error creating order:", error);
+
+            // Extract and format the error messages if available
+            if (error?.response?.data?.error) {
+                const errorMessages = error.response.data.error.map((err: any) => err.message);
+                setMessage(errorMessages.join("\n"));
+            } else {
+                setMessage("Failed to create order. Please try again.");
+            }
         }
     };
 
-    const filteredAddressFields = addressFields.slice(0, -1); // ✅ remove "desc"
+    // ========== Determine Fields Based on Auth & Address Form Mode ==========
+    let fieldsToRender = [];
 
-    const fieldsToRender = [
-        ...(showNewAddressForm ? filteredAddressFields : []),
-        ...(OrderFormFields(isAuthenticated).filter(
-            (field) =>
-                !["name", "email", "phone", "address", "floor", "apartment"].includes(field.name)
-        )),
-        ...(formData.paymentMethod === "instaPay" || formData.paymentMethod === "Vodafone Cash"
-            ? instaOrVodafonePaid
-            : []),
-    ];
+    if (!isAuthenticated) {
+        // For unauthenticated users → show full form
+        fieldsToRender = OrderFormFields(false);
+    } else if (showNewAddressForm) {
+        // Authenticated and wants to add new address → show only address fields (no desc/payment)
+        fieldsToRender = [...addressFields,
+        {
+            name: "paymentMethod",
+            type: "select",
+            label: "Payment Method",
+            options: [
+                { value: "cash", label: "Cash" },
+                { value: "instaPay", label: "InstaPay" },
+                { value: "Vodafone Cash", label: "Vodafone Cash" },
+            ],
+        },
+        ]; // Remove desc
+    } else {
+        // Authenticated, using existing address → show only payment method
+        fieldsToRender = [
+            {
+                name: "paymentMethod",
+                type: "select",
+                label: "Payment Method",
+                options: [
+                    { value: "cash", label: "Cash" },
+                    { value: "instaPay", label: "InstaPay" },
+                    { value: "Vodafone Cash", label: "Vodafone Cash" },
+                ],
+            },
+        ];
+    }
 
-    if (length === 0)
+    // Append extra fields if payment method is Vodafone/instaPay
+    if (
+        formData.paymentMethod === "instaPay" ||
+        formData.paymentMethod === "Vodafone Cash"
+    ) {
+        fieldsToRender = [...fieldsToRender, ...instaOrVodafonePaid];
+    }
+
+    // ========== UI Blocks ==========
+    if (length === 0) {
         return (
             <Title
                 title="Your Cart is Empty"
                 cssClasses="text-mainColor flex justify-center items-center"
             />
         );
+    }
 
     if (isAuthenticated && !user?.name) {
         return <p className="text-center text-gray-500">Loading your info...</p>;
@@ -143,7 +186,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
 
     return (
         <>
-            {isAuthenticated && user?.addresses?.length > 0 && !showNewAddressForm ? (
+            {isAuthenticated && user?.addresses?.length > 0 && !showNewAddressForm && (
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Select Address
@@ -163,9 +206,9 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
                         ))}
                     </select>
                 </div>
-            ) : null}
+            )}
 
-            {!showNewAddressForm && (
+            {isAuthenticated && !showNewAddressForm && (
                 <Button
                     buttonName="Add New Address"
                     handleclick={() => setShowNewAddressForm(true)}
@@ -190,7 +233,8 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
                     {formData.orderItems?.map((item, index) => (
                         <div key={index} className="mb-2">
                             <p>
-                                {item.name} - Quantity: {item.quantity} - Price: ${item.price.toFixed(2)}
+                                {item.name} - Quantity: {item.quantity} - Price: $
+                                {item.price.toFixed(2)}
                             </p>
                         </div>
                     ))}
@@ -202,6 +246,9 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
                         )}
                     </p>
                 </div>
+                {message && (
+                    <div className="text-red-500 text-sm mt-2">{message}</div>
+                )}
             </Form>
         </>
     );
