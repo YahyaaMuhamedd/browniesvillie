@@ -31,6 +31,8 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
     const { length } = useCartLength();
 
     const [showNewAddressForm, setShowNewAddressForm] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
 
     const {
         formData,
@@ -93,18 +95,24 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            setLoading(true);
+            setMessage("");
             const response = await CreateOrder(formData);
             localStorage.setItem("userId", response.order.userId);
             if (response) {
                 dispatch(setToken(response?.token));
                 dispatch(fetchUserData(response.order.userId));
-                alert("Order created successfully!");
+                setMessage("Order created successfully!");
+                setLoading(false);
                 onClose();
             } else {
-                alert("Failed to create order. Please try again.");
+                setLoading(false);
+                setMessage("Failed to create order. Please try again.");
             }
         } catch (error) {
-            alert("Failed to create order. Please try again.");
+            console.error(error);
+            setLoading(false);
+            setMessage("Failed to create order. Please try again.");
         }
     };
 
@@ -172,8 +180,10 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
                 handleSelectChange={handleSelectChange}
                 handleSubmit={handleSubmit}
                 cssClasses="space-y-4"
-                buttonName="Submit Order"
+                buttonName={loading ? "Creating..." : "Create Order"}
                 BtnCssClasses="w-full text-center"
+                disabled={loading}
+                errors={message ? { form: message } : undefined}
             >
                 <div>
                     <h3 className="text-lg font-semibold mb-2">Selected Products</h3>

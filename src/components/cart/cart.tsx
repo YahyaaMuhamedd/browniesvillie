@@ -9,9 +9,14 @@ import { Product } from "@/types/ProductTypes";
 import { RootState } from "@/store/store";
 import { removeItemFromLocalStorage } from "@/functions/localStorage";
 import { setMessage, setHrefLocation } from "@/store/Slices/feedBackSlice";
+import dynamic from "next/dynamic";
+import LoadingSpinner from "@/ReusableComp/loadingSpinner";
 
-const OrderSumarry = React.lazy(() => import("./orderSumarry"));
 
+const OrderSumarry = dynamic(() => import("./orderSumarry"), {
+    ssr: false,
+    loading: () => <LoadingSpinner />,
+});
 const Cart: React.FC = () => {
     const [cart, setCart] = useState<Product[]>([]);
 
@@ -21,11 +26,13 @@ const Cart: React.FC = () => {
     useEffect(() => {
 
         const fetchCart = async () => {
-            const cartLocalStorage = await localStorage.getItem("cart");
-            if (cartLocalStorage) {
-                setCart(ArrayConverter(cartLocalStorage));
-            }
-        };
+            if (typeof window !== "undefined") {
+                const cartLocalStorage = await localStorage.getItem("cart");
+                if (cartLocalStorage) {
+                    setCart(ArrayConverter(cartLocalStorage));
+                }
+            };
+        }
 
         fetchCart();
     }, []);

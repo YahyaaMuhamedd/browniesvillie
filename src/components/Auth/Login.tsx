@@ -9,6 +9,7 @@ import { Form } from "@/ReusableComp/forms/Form";
 import { loginFields } from "@/ReusableComp/forms/fields";
 import { fetchUserData } from "@/services/userServices";
 import { setToken } from "@/store/Slices/authSlice";
+import { useState } from "react";
 
 interface LoginProps {
     onClose: () => void;
@@ -20,17 +21,28 @@ export const Login: React.FC<LoginProps> = ({ onClose, switchToRegister }) => {
         email: "",
         phone: "",
     });
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
     const dispatch = useAppDispatch();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            setLoading(true);
+            setMessage("");
             const response = await dispatch(login(formData)).unwrap();
             dispatch(setToken(response));
             dispatch(fetchUserData(response.data.loginUser._id));
-
-            onClose(); // Close the modal on successful login
-        } catch (error) {
+            setLoading(false);
+            setMessage("Login successful!");
+            const timer = setTimeout(() => {
+                setMessage("");
+                onClose(); // Close the modal after successful login
+            }, 1000);
+            clearTimeout(timer);
+        } catch (error: any) {
+            setLoading(false);
+            setMessage(error || "Login failed. Please try again.");
             console.error("Login failed:", error);
         }
     };
@@ -41,9 +53,12 @@ export const Login: React.FC<LoginProps> = ({ onClose, switchToRegister }) => {
             fields={loginFields}
             handleInputChange={handleInputChange}
             handleSubmit={handleSubmit}
-            buttonName="Login"
+            buttonName={loading ? "Loading..." : "Login"}
+            disabled={loading}
             handleSelectChange={() => { }}
             BtnCssClasses="w-full text-center "
+            cssClasses="flex flex-col gap-4"
+            errors={message ? { email: message } : undefined} // Display error message if any
         >
             <div className="text-center text-sm text-gray-600">
                 Don't have an account?{" "}
@@ -55,6 +70,7 @@ export const Login: React.FC<LoginProps> = ({ onClose, switchToRegister }) => {
                     Register
                 </button>
             </div>
+            {message && <p className="text-center text-sm text-red-500">{message}</p>}
         </Form>
     );
 };
