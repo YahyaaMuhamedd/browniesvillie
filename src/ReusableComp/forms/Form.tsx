@@ -17,6 +17,7 @@ interface FormProps {
     handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
     buttonName: string
     handleSelectChange: (fieldName: string, selectedOption: string | null) => void;
+    disabled?: boolean;
     errors?: Record<string, string>;
     cssClasses?: string;
     children?: React.ReactNode;
@@ -34,10 +35,11 @@ export const Form: React.FC<FormProps> = ({
     cssClasses,
     children,
     buttonName,
-    BtnCssClasses
+    BtnCssClasses,
+    disabled = false,
 }) => {
     return (
-        <form onSubmit={handleSubmit} className={`space-y-4 ${cssClasses || ""}`}>
+        <form onSubmit={handleSubmit} className={`gap-4 ${cssClasses || ""}`}>
             {fields.map((field) => (
                 <div key={field.name}>
                     <SelectInputByType
@@ -64,6 +66,8 @@ export const Form: React.FC<FormProps> = ({
                 type="submit"
                 handleclick={() => { }}
                 cssClasses={BtnCssClasses}
+                disabled={disabled}
+                aria-label={buttonName}
             />
         </form>
     );

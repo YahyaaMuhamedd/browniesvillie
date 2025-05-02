@@ -16,7 +16,7 @@ export default function Button({ handleclick, buttonName, cssClasses, type, disa
         type={type}
         disabled={disabled}
         aria-label={buttonName}
-        className={`rounded-lg bg-mainColor text-secondColor py-2 hover:bg-hoverColor px-4 duration-300 transition-all ${cssClasses}`}
+        className={`${disabled ? "opacity-50 cursor-not-allowed" : ""} rounded-lg bg-mainColor text-secondColor py-2 hover:bg-hoverColor px-4 duration-300 transition-all ${cssClasses}`}
       >{buttonName}
       </button>
     </>

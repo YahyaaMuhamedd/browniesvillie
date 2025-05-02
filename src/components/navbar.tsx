@@ -68,9 +68,9 @@ const Navbar: React.FC = () => {
                         <div className="w-full cursor-pointer">
                             <FavoriteIcon />
                         </div>
-                        <div className="w-full cursor-pointer">
+                        <Link href="/dashboard" className="w-full cursor-pointer">
                             {isAuthenticated ? <User /> : null}
-                        </div>
+                        </Link>
                         {!isAuthenticated ? (
                             <AuthModal onClose={() => { }} setDynamicTitle={() => { }} />
                         ) : (
@@ -106,6 +106,9 @@ const Navbar: React.FC = () => {
                             <ShoppingcartIcon />
                         </Link>
                         <FavoriteIcon />
+                        <Link href="/dashboard" className=" cursor-pointer">
+                            {isAuthenticated ? <User /> : null}
+                        </Link>
                         {!isAuthenticated ? (
                             <AuthModal onClose={() => { }} setDynamicTitle={() => { }} />
                         ) : (

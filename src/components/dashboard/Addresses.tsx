@@ -1,97 +1,40 @@
-import AxiosInstance from "@/services/axiosInstance";
-import { useState } from "react";
+"use client";
 
-export const AddressManager = () => {
-    const [addresses, setAddresses] = useState<string[]>([]);
-    const [addressData, setAddressData] = useState({
-        phone: "",
-        address: "",
-        floor: 0,
-        apartment: 0,
-        desc: "",
-    });
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
+import { useAppSelector } from "@/hooks/Redux";
+import { useInputChange } from "@/hooks/useInputsChange";
+import { addressFields } from "@/ReusableComp/forms/fields";
+import { Form } from "@/ReusableComp/forms/Form";
+import { addAddress } from "@/services/userServices";
+import { RootState } from "@/store/store";
+import { useEffect, useState } from "react";
+import AddAddressForm from "../addAddressForm";
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setAddressData({ ...addressData, [e.target.name]: e.target.value });
-    };
+const AddressManager = () => {
+    const { user } = useAppSelector((state: RootState) => state.user);
 
-    const handleSubmit = async () => {
-        try {
-            setLoading(true);
-            const res = await AxiosInstance.post("users/addAddress", addressData);
-            if (res.data.status === "success") {
-                setAddresses((prev) => [...prev, addressData.address]);
-                setMessage("Address added successfully!");
-            }
-        } catch (error) {
-            setMessage("Failed to add address. Please try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
+    const [addresses, setAddresses] = useState<any[]>(user?.addresses || []);
     return (
         <div>
-            <h2 className="text-xl font-semibold mb-2">My Addresses</h2>
-            {addresses.length ? (
+            <h2 className="text-xl font-semibold mb-4">My Addresses</h2>
+
+            {addresses.length > 0 ? (
                 <ul className="list-disc list-inside mb-4">
                     {addresses.map((addr, index) => (
-                        <li key={index}>{addr}</li>
+                        <li key={index}>
+                            {addr.address} - Floor: {addr.floor} - Apartment: {addr.apartment}
+                        </li>
                     ))}
                 </ul>
             ) : (
                 <p>No addresses added yet.</p>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input
-                    name="phone"
-                    placeholder="Phone"
-                    value={addressData.phone}
-                    onChange={handleChange}
-                    className="p-2 border rounded"
-                />
-                <input
-                    name="address"
-                    placeholder="Address"
-                    value={addressData.address}
-                    onChange={handleChange}
-                    className="p-2 border rounded"
-                />
-                <input
-                    type="number"
-                    name="floor"
-                    placeholder="Floor"
-                    value={addressData.floor}
-                    onChange={handleChange}
-                    className="p-2 border rounded"
-                />
-                <input
-                    type="number"
-                    name="apartment"
-                    placeholder="Apartment"
-                    value={addressData.apartment}
-                    onChange={handleChange}
-                    className="p-2 border rounded"
-                />
-                <textarea
-                    name="desc"
-                    placeholder="Description"
-                    value={addressData.desc}
-                    onChange={handleChange}
-                    className="p-2 border rounded col-span-full"
-                />
-            </div>
-            <button
-                onClick={handleSubmit}
-                className="mt-4 px-4 py-2 bg-mainColor text-white rounded hover:opacity-90"
-                disabled={loading}
-            >
-                {loading ? "Adding..." : "Add Address"}
-            </button>
-            {message && <p className="mt-2 text-sm text-green-500">{message}</p>}
+            <h3 className="text-lg font-semibold mb-2">Add New Address</h3>
+
+
+            <AddAddressForm />
         </div>
     );
 };
+
+export default AddressManager;

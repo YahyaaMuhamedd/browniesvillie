@@ -1,16 +1,18 @@
-import { capitalizeFirstLetter } from "@/helpers/capitalizeFirstLetter";
+"use client";
+
 import { useAppSelector } from "@/hooks/Redux";
 import { RootState } from "@/store/store";
 
 export const Profile = () => {
-    const { user, isAuthenticated } = useAppSelector((state: RootState) => state.user);
-
+    const { user } = useAppSelector((state: RootState) => state.user);
 
     return (
-        <div>
-            <h1 className="text-2xl font-bold mb-4">Welcome, {capitalizeFirstLetter(user?.name?.split(" ")[0])}</h1>
-            <p><strong>Email:</strong> {user?.email}</p>
-            <p><strong>Phone:</strong> {user?.phone}</p>
+        <div className="bg-white p-6 rounded-2xl shadow-md w-full">
+            <h1 className="text-2xl font-bold text-mainColor mb-6">Welcome, {user?.name}</h1>
+            <div className="space-y-3">
+                <p><span className="font-semibold">Email:</span> {user?.email}</p>
+                <p><span className="font-semibold">Phone:</span> {user?.phone}</p>
+            </div>
         </div>
     );
 };
