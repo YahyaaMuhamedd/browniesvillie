@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`antialiased  mx-auto `}
+        className={`antialiased  mx-auto bg-gradient-to-br from-orange-100 via-zinc-200 to-[#B15D26]`}
       >
         <ClientProvider>
           <ReactQueryClientProvider>

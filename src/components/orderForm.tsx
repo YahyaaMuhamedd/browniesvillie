@@ -185,7 +185,8 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
     }
 
     return (
-        <>
+        <div className="relative z-[1000]">
+
             {isAuthenticated && user?.addresses?.length > 0 && !showNewAddressForm && (
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -250,7 +251,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ onClose }) => {
                     <div className="text-red-500 text-sm mt-2">{message}</div>
                 )}
             </Form>
-        </>
+        </div>
     );
 };
 

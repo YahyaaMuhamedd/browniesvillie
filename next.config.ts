@@ -9,13 +9,7 @@ const withBundleAnalyzer =
 
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  webpack(config, { isServer }) {
-    if (!isServer && withBundleAnalyzer) {
-      config.plugins.push(new withBundleAnalyzer());
-    }
-    return config;
-  },
+
   // swcMinify: true,
   images: {
     domains: ['i.ibb.co'], // Add the domain here
@@ -27,6 +21,9 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true, // Disable ESLint during builds
   },
+  swcMinify: true,
+  reactStrictMode: true,
+
 };
 
 export default nextConfig;

@@ -8,7 +8,6 @@ export default function Home() {
     <>
       <Suspense fallback={<div>Loading...</div>}>
         <SwipperSlider />
-        <Title title="Our Products" cssClasses=" text-mainColor flex justify-center items-center " />
         <ProductCard />
       </Suspense>
     </>

@@ -6,7 +6,6 @@ const Cart = React.lazy(() => import("@/components/cart/cart"));
 function CartPage() {
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <Title title="Your Cart" cssClasses=" text-mainColor flex justify-center items-center " />
             <Cart />
         </Suspense>
     )
