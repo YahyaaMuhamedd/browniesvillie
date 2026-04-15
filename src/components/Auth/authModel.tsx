@@ -24,4 +24,4 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose, setDynamicTitle }) => {
     );
 };
 
-export default withModal(AuthModal, "Login", "Login", "w-fit px-4 py-2");
+export default withModal(AuthModal, "Login", "Login", "w-fit px-4 py-2 z-[500]");

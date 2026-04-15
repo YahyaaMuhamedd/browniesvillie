@@ -13,7 +13,7 @@ const OrderSumarry = ({ total }: orderSumarryProps) => {
     };
 
     return (
-        <div className="relative z-[500]">
+        <div className="relative z-[50]">
             {/* Order Summary */}
             <div className="p-4 rounded-lg border border-color bg-white/25 backdrop-blur-lg mb-2">
                 <h2 className="text-2xl font-bold text-mainColor mb-4">Order Summary</h2>
